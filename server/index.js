@@ -7,7 +7,22 @@ const app = express();
 const socket = require("socket.io");
 require("dotenv").config();
 
-app.use(cors());
+const whitelist = [
+  "http://localhost:3000",
+  "https://chatbot-mern-348hga.vercel.app",
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 mongoose
